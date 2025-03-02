@@ -9,6 +9,7 @@ namespace StringCalculator.Services.Parsers
     public class StringParser : IStringParser
     {
         private readonly int[] _defaultListWhenEmptyString = new int[0];
+        private readonly char[] _delimeters = new char[] { ',', '\n' };
 
         public int[] Parse(string input)
         {
@@ -19,7 +20,7 @@ namespace StringCalculator.Services.Parsers
                 return _defaultListWhenEmptyString;
             }
 
-            string[] numbersList = cleanNumbers.Split(',');
+            string[] numbersList = cleanNumbers.Split(_delimeters);
             int listLength = numbersList.Length;
             int[] numbers = new int[listLength];
 
