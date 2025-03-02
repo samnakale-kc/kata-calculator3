@@ -47,5 +47,33 @@ namespace StringCalculatorTests.Services.Parsers
             // Assert
             Assert.Equal(expectedResult, result);
         }
+
+        [Fact]
+        public void GIVEN_CustomDelimetedInput_WHEN_Parsing_THEN_ReturnNumbers()
+        {
+            // Arrange
+            string inputNumbers = "//;\n1;2";
+            int[] expectedResult = new int[] { 1, 2 };
+
+            // Act
+            int[] result = _stringParser.Parse(inputNumbers);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Fact]
+        public void GIVEN_CustomDelimetedInputWithoutFirstLine_WHEN_Parsing_THEN_ReturnNumbers()
+        {
+            // Arrange
+            string inputNumbers = "1;2";
+            int[] expectedResult = new int[] { 1, 2 };
+
+            // Act
+            int[] result = _stringParser.Parse(inputNumbers);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
     }
 }

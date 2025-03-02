@@ -61,5 +61,35 @@ namespace StringCalculatorTests
             // Assert
             Assert.Equal(expectedResult, result);
         }
+
+        [Fact]
+        public void GIVEN_CustomDelimetedInput_WHEN_Adding_THEN_ReturnSum()
+        {
+            // Arrange
+            string inputNumbers = "//;\n1;2";
+            int expectedResult = 3;
+            _stringParserMock.Setup(s => s.Parse(inputNumbers)).Returns(new int[] { 1, 2 });
+
+            // Act
+            int result = _calculator.Add(inputNumbers);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Fact]
+        public void GIVEN_CustomDelimetedInputWithoutFirstLine_WHEN_Adding_THEN_ReturnSum()
+        {
+            // Arrange
+            string inputNumbers = "1;2";
+            int expectedResult = 3;
+            _stringParserMock.Setup(s => s.Parse(inputNumbers)).Returns(new int[] { 1, 2 });
+
+            // Act
+            int result = _calculator.Add(inputNumbers);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
     }
 }
