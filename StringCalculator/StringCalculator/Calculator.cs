@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StringCalculator.Services.Parsers;
+﻿using StringCalculator.Services.Parsers;
 
 namespace StringCalculator
 {

@@ -1,6 +1,4 @@
-﻿
-using StringCalculator;
-using StringCalculator.Services.Parsers;
+﻿using StringCalculator.Services.Parsers;
 
 namespace StringCalculatorTests.Services.Parsers
 {
