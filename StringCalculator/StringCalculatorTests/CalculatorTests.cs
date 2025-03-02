@@ -45,5 +45,21 @@ namespace StringCalculatorTests
             // Assert
             Assert.Equal(expectedResult, result);
         }
+
+        [Theory]
+        [InlineData("1\n2,3", 6)]
+        [InlineData("1\n2", 3)]
+        public void GIVEN_AnInputSeparatedByNewLine_WHEN_Adding_THEN_ReturnSum(string numbers, int expectedResult)
+        {
+            // Arrange 
+            _stringParserMock.Setup(s => s.Parse("1\n2,3")).Returns(new int[] { 1, 2, 3 });
+            _stringParserMock.Setup(s => s.Parse("1\n2")).Returns(new int[] { 1, 2 });
+
+            // Act
+            int result = _calculator.Add(numbers);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
     }
 }
