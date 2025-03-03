@@ -32,8 +32,8 @@ namespace StringCalculatorTests.Services.NumberFilters
         public void GIVEN_InputWitNumbersGreatarThanOneThousand_WHEN_FilteringOutInvalidNumbers_THEN_FilterOutNumberGreaterThanOneThousandAndReturnTheRemainingNumbers()
         {
             // Arrange
-            int[] inputNumbers = new int[] { 1, 1002, 5 };
-            int[] expectedResult = new int[] { 1, 5 };
+            int[] inputNumbers = new int[] { 1, 1002, 1000 };
+            int[] expectedResult = new int[] { 1, 1000 };
 
             // Act
             int[] result = _additionNumbersFilter.FilterOutInvalidNumbers(inputNumbers);
