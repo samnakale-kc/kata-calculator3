@@ -1,13 +1,18 @@
-﻿using StringCalculator.Services.Parsers;
+﻿using Moq;
+using StringCalculator.Services.Delimiters;
+using StringCalculator.Services.Parsers;
 
 namespace StringCalculatorTests.Services.Parsers
 {
     public class StringParserTests
     {
         StringParser _stringParser;
+        Mock<IDelimiter> _mockAdditionDelimiterService;
+
         public StringParserTests()
         {
-            _stringParser = new StringParser();
+            _mockAdditionDelimiterService = new Mock<IDelimiter>();
+            _stringParser = new StringParser(_mockAdditionDelimiterService.Object);
         }
 
         [Fact]
@@ -25,10 +30,13 @@ namespace StringCalculatorTests.Services.Parsers
         }
 
         [Theory]
-        [InlineData("1", new int[] { 1 })]
-        [InlineData("1,2", new int[] { 1, 2 })]
-        public void GIVEN_OneOrTwoNumbers_WHEN_Parsing_THEN_ReturnListOfNumbers(string numbers, int[] expectedResult)
+        [InlineData("1", new string[] { "1" }, new int[] { 1 })]
+        [InlineData("1,2", new string[] { "1", "2" }, new int[] { 1, 2 })]
+        public void GIVEN_OneOrTwoNumbers_WHEN_Parsing_THEN_ReturnListOfNumbers(string numbers, string[] expectedParserResult, int[] expectedResult)
         {
+            // Arrange
+            _mockAdditionDelimiterService.Setup(s => s.GetNumbersFromDelimitedString(numbers)).Returns(expectedParserResult);
+
             // Act
             int[] result = _stringParser.Parse(numbers);
 
@@ -37,10 +45,13 @@ namespace StringCalculatorTests.Services.Parsers
         }
 
         [Theory]
-        [InlineData("1\n2,3", new int[] { 1, 2, 3 })]
-        [InlineData("1\n2", new int[] { 1, 2 })]
-        public void GIVEN_AnInputSeparatedByNewLine_WHEN_Parsing_THEN_ReturnListOfNumbers(string numbers, int[] expectedResult)
+        [InlineData("1\n2,3", new string[] { "1", "2", "3" }, new int[] { 1, 2, 3 })]
+        [InlineData("1\n2", new string[] { "1", "2" }, new int[] { 1, 2 })]
+        public void GIVEN_AnInputSeparatedByNewLine_WHEN_Parsing_THEN_ReturnListOfNumbers(string numbers, string[] expectedParserResult, int[] expectedResult)
         {
+            // Arrange
+            _mockAdditionDelimiterService.Setup(s => s.GetNumbersFromDelimitedString(numbers)).Returns(expectedParserResult);
+
             // Act
             int[] result = _stringParser.Parse(numbers);
 
@@ -54,6 +65,8 @@ namespace StringCalculatorTests.Services.Parsers
             // Arrange
             string inputNumbers = "//;\n1;2";
             int[] expectedResult = new int[] { 1, 2 };
+            string[] expectedParserResult = new string[] { "1", "2" };
+            _mockAdditionDelimiterService.Setup(s => s.GetNumbersFromDelimitedString(inputNumbers)).Returns(expectedParserResult);
 
             // Act
             int[] result = _stringParser.Parse(inputNumbers);
@@ -68,6 +81,8 @@ namespace StringCalculatorTests.Services.Parsers
             // Arrange
             string inputNumbers = "1;2";
             int[] expectedResult = new int[] { 1, 2 };
+            string[] expectedParserResult = new string[] { "1", "2" };
+            _mockAdditionDelimiterService.Setup(s => s.GetNumbersFromDelimitedString(inputNumbers)).Returns(expectedParserResult);
 
             // Act
             int[] result = _stringParser.Parse(inputNumbers);
