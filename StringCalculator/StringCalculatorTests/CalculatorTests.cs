@@ -91,5 +91,18 @@ namespace StringCalculatorTests
             // Assert
             Assert.Equal(expectedResult, result);
         }
+
+        [Fact]
+        public void GIVEN_InputWithNegativeNumbers_WHEN_Adding_THEN_ThrowAnException()
+        {
+            // Arrange
+            string inputNumbers = "1;-2;-5";
+            string[] expectedNumbersFromDelimeterService = ["1", "-2", "-5"];
+            _stringParserMock.Setup(s => s.Parse(inputNumbers)).Returns(new int[] { 1, -2, -5 });
+
+            // Act & Assert
+            var ex = Assert.Throws<ArgumentException>(() => _calculator.Add(inputNumbers));
+            Assert.Equal("negatives not allowed -2,-5", ex.Message);
+        }
     }
 }

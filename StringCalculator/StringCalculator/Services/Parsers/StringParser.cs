@@ -1,4 +1,5 @@
 ﻿using StringCalculator.Services.Delimiters;
+using StringCalculator.Services.NumberFilters;
 
 namespace StringCalculator.Services.Parsers
 {
@@ -7,10 +8,12 @@ namespace StringCalculator.Services.Parsers
         private readonly int[] _defaultListWhenEmptyString = new int[0];
 
         private readonly IDelimiter _delimeterService;
+        private readonly IFilterNumbers _numbersFilterService;
 
-        public StringParser(IDelimiter delimeterService)
+        public StringParser(IDelimiter delimeterService, IFilterNumbers numbersFilterService)
         {
             _delimeterService = delimeterService;
+            _numbersFilterService = numbersFilterService;
         }
 
         public int[] Parse(string input)
@@ -33,7 +36,7 @@ namespace StringCalculator.Services.Parsers
                 numbers[i] = number;
             }
 
-            return numbers;
+            return _numbersFilterService.FilterOutInvalidNumbers(numbers);
         }
     }
 }

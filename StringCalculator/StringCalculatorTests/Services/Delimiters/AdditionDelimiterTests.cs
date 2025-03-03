@@ -52,5 +52,19 @@ namespace StringCalculatorTests.Services.Delimiters
             // Assert
             Assert.Equal(expectedResult, result);
         }
+
+        [Fact]
+        public void GIVEN_InputWithNegativeNumbers_WHEN_Parsing_THEN_ReturnNumbers()
+        {
+            // Arrange
+            string inputNumbers = "1;-2;-5";
+            string[] expectedResult = new string[] { "1", "-2", "-5" };
+
+            // Act
+            string[] result = _additionDelimeter.GetNumbersFromDelimitedString(inputNumbers);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
     }
 }

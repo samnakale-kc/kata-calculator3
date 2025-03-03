@@ -1,4 +1,5 @@
 ﻿using Moq;
+using StringCalculator;
 using StringCalculator.Services.Delimiters;
 using StringCalculator.Services.Parsers;
 
@@ -7,12 +8,12 @@ namespace StringCalculatorTests.Services.Parsers
     public class StringParserTests
     {
         StringParser _stringParser;
-        Mock<IDelimiter> _mockAdditionDelimiterService;
+        Mock<IDelimiter> _additionDelimiterServiceMock;
 
         public StringParserTests()
         {
-            _mockAdditionDelimiterService = new Mock<IDelimiter>();
-            _stringParser = new StringParser(_mockAdditionDelimiterService.Object);
+            _additionDelimiterServiceMock = new Mock<IDelimiter>();
+            _stringParser = new StringParser(_additionDelimiterServiceMock.Object);
         }
 
         [Fact]
@@ -32,10 +33,10 @@ namespace StringCalculatorTests.Services.Parsers
         [Theory]
         [InlineData("1", new string[] { "1" }, new int[] { 1 })]
         [InlineData("1,2", new string[] { "1", "2" }, new int[] { 1, 2 })]
-        public void GIVEN_OneOrTwoNumbers_WHEN_Parsing_THEN_ReturnListOfNumbers(string numbers, string[] expectedParserResult, int[] expectedResult)
+        public void GIVEN_OneOrTwoNumbers_WHEN_Parsing_THEN_ReturnListOfNumbers(string numbers, string[] expectedNumbersFromDelimeterService, int[] expectedResult)
         {
             // Arrange
-            _mockAdditionDelimiterService.Setup(s => s.GetNumbersFromDelimitedString(numbers)).Returns(expectedParserResult);
+            _additionDelimiterServiceMock.Setup(s => s.GetNumbersFromDelimitedString(numbers)).Returns(expectedNumbersFromDelimeterService);
 
             // Act
             int[] result = _stringParser.Parse(numbers);
@@ -47,10 +48,10 @@ namespace StringCalculatorTests.Services.Parsers
         [Theory]
         [InlineData("1\n2,3", new string[] { "1", "2", "3" }, new int[] { 1, 2, 3 })]
         [InlineData("1\n2", new string[] { "1", "2" }, new int[] { 1, 2 })]
-        public void GIVEN_AnInputSeparatedByNewLine_WHEN_Parsing_THEN_ReturnListOfNumbers(string numbers, string[] expectedParserResult, int[] expectedResult)
+        public void GIVEN_AnInputSeparatedByNewLine_WHEN_Parsing_THEN_ReturnListOfNumbers(string numbers, string[] expectedNumbersFromDelimeterService, int[] expectedResult)
         {
             // Arrange
-            _mockAdditionDelimiterService.Setup(s => s.GetNumbersFromDelimitedString(numbers)).Returns(expectedParserResult);
+            _additionDelimiterServiceMock.Setup(s => s.GetNumbersFromDelimitedString(numbers)).Returns(expectedNumbersFromDelimeterService);
 
             // Act
             int[] result = _stringParser.Parse(numbers);
@@ -65,8 +66,8 @@ namespace StringCalculatorTests.Services.Parsers
             // Arrange
             string inputNumbers = "//;\n1;2";
             int[] expectedResult = new int[] { 1, 2 };
-            string[] expectedParserResult = new string[] { "1", "2" };
-            _mockAdditionDelimiterService.Setup(s => s.GetNumbersFromDelimitedString(inputNumbers)).Returns(expectedParserResult);
+            string[] expectedNumbersFromDelimeterService = new string[] { "1", "2" };
+            _additionDelimiterServiceMock.Setup(s => s.GetNumbersFromDelimitedString(inputNumbers)).Returns(expectedNumbersFromDelimeterService);
 
             // Act
             int[] result = _stringParser.Parse(inputNumbers);
@@ -81,14 +82,27 @@ namespace StringCalculatorTests.Services.Parsers
             // Arrange
             string inputNumbers = "1;2";
             int[] expectedResult = new int[] { 1, 2 };
-            string[] expectedParserResult = new string[] { "1", "2" };
-            _mockAdditionDelimiterService.Setup(s => s.GetNumbersFromDelimitedString(inputNumbers)).Returns(expectedParserResult);
+            string[] expectedNumbersFromDelimeterService = new string[] { "1", "2" };
+            _additionDelimiterServiceMock.Setup(s => s.GetNumbersFromDelimitedString(inputNumbers)).Returns(expectedNumbersFromDelimeterService);
 
             // Act
             int[] result = _stringParser.Parse(inputNumbers);
 
             // Assert
             Assert.Equal(expectedResult, result);
+        }
+
+        [Fact]
+        public void GIVEN_InputWithNegativeNumbers_WHEN_Parsing_THEN_ThrowAnException()
+        {
+            // Arrange
+            string inputNumbers = "1;-2;-5";
+            string[] expectedNumbersFromDelimeterService = new string[] { "1", "-2", "-5" };
+            _additionDelimiterServiceMock.Setup(s => s.GetNumbersFromDelimitedString(inputNumbers)).Returns(expectedNumbersFromDelimeterService);
+
+            // Act & Assert
+            var ex = Assert.Throws<ArgumentException>(() => _stringParser.Parse(inputNumbers));
+            Assert.Equal("negatives not allowed -2,-5", ex.Message);
         }
     }
 }
