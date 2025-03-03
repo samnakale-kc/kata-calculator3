@@ -98,7 +98,7 @@ namespace StringCalculatorTests
             // Arrange
             string inputNumbers = "1;-2;-5";
             string[] expectedNumbersFromDelimeterService = ["1", "-2", "-5"];
-            _stringParserMock.Setup(s => s.Parse(inputNumbers)).Returns(new int[] { 1, -2, -5 });
+            _stringParserMock.Setup(s => s.Parse(inputNumbers)).Throws(new ArgumentException("negatives not allowed -2,-5"));
 
             // Act & Assert
             var ex = Assert.Throws<ArgumentException>(() => _calculator.Add(inputNumbers));

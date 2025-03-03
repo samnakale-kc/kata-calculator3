@@ -1,6 +1,7 @@
 ﻿using Moq;
 using StringCalculator;
 using StringCalculator.Services.Delimiters;
+using StringCalculator.Services.NumberFilters;
 using StringCalculator.Services.Parsers;
 
 namespace StringCalculatorTests.Services.Parsers
@@ -9,11 +10,13 @@ namespace StringCalculatorTests.Services.Parsers
     {
         StringParser _stringParser;
         Mock<IDelimiter> _additionDelimiterServiceMock;
+        Mock<IFilterNumbers> _additionNumbersFilterServiceMock;
 
         public StringParserTests()
         {
             _additionDelimiterServiceMock = new Mock<IDelimiter>();
-            _stringParser = new StringParser(_additionDelimiterServiceMock.Object);
+            _additionNumbersFilterServiceMock = new Mock<IFilterNumbers>();
+            _stringParser = new StringParser(_additionDelimiterServiceMock.Object, _additionNumbersFilterServiceMock.Object);
         }
 
         [Fact]
@@ -37,6 +40,7 @@ namespace StringCalculatorTests.Services.Parsers
         {
             // Arrange
             _additionDelimiterServiceMock.Setup(s => s.GetNumbersFromDelimitedString(numbers)).Returns(expectedNumbersFromDelimeterService);
+            _additionNumbersFilterServiceMock.Setup(s => s.FilterOutInvalidNumbers(expectedResult)).Returns(expectedResult);
 
             // Act
             int[] result = _stringParser.Parse(numbers);
@@ -52,6 +56,7 @@ namespace StringCalculatorTests.Services.Parsers
         {
             // Arrange
             _additionDelimiterServiceMock.Setup(s => s.GetNumbersFromDelimitedString(numbers)).Returns(expectedNumbersFromDelimeterService);
+            _additionNumbersFilterServiceMock.Setup(s => s.FilterOutInvalidNumbers(expectedResult)).Returns(expectedResult);
 
             // Act
             int[] result = _stringParser.Parse(numbers);
@@ -68,6 +73,7 @@ namespace StringCalculatorTests.Services.Parsers
             int[] expectedResult = new int[] { 1, 2 };
             string[] expectedNumbersFromDelimeterService = new string[] { "1", "2" };
             _additionDelimiterServiceMock.Setup(s => s.GetNumbersFromDelimitedString(inputNumbers)).Returns(expectedNumbersFromDelimeterService);
+            _additionNumbersFilterServiceMock.Setup(s => s.FilterOutInvalidNumbers(expectedResult)).Returns(expectedResult);
 
             // Act
             int[] result = _stringParser.Parse(inputNumbers);
@@ -84,6 +90,7 @@ namespace StringCalculatorTests.Services.Parsers
             int[] expectedResult = new int[] { 1, 2 };
             string[] expectedNumbersFromDelimeterService = new string[] { "1", "2" };
             _additionDelimiterServiceMock.Setup(s => s.GetNumbersFromDelimitedString(inputNumbers)).Returns(expectedNumbersFromDelimeterService);
+            _additionNumbersFilterServiceMock.Setup(s => s.FilterOutInvalidNumbers(expectedResult)).Returns(expectedResult);
 
             // Act
             int[] result = _stringParser.Parse(inputNumbers);
@@ -99,6 +106,7 @@ namespace StringCalculatorTests.Services.Parsers
             string inputNumbers = "1;-2;-5";
             string[] expectedNumbersFromDelimeterService = new string[] { "1", "-2", "-5" };
             _additionDelimiterServiceMock.Setup(s => s.GetNumbersFromDelimitedString(inputNumbers)).Returns(expectedNumbersFromDelimeterService);
+            _additionNumbersFilterServiceMock.Setup(s => s.FilterOutInvalidNumbers(new int[] {1, -2, -5})).Throws(new ArgumentException("negatives not allowed -2,-5"));
 
             // Act & Assert
             var ex = Assert.Throws<ArgumentException>(() => _stringParser.Parse(inputNumbers));
