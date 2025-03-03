@@ -1,5 +1,6 @@
 ﻿using Moq;
 using StringCalculator;
+using StringCalculator.Services.NumberFilters;
 using StringCalculator.Services.Parsers;
 
 namespace StringCalculatorTests
@@ -103,6 +104,21 @@ namespace StringCalculatorTests
             // Act & Assert
             var ex = Assert.Throws<ArgumentException>(() => _calculator.Add(inputNumbers));
             Assert.Equal("negatives not allowed -2,-5", ex.Message);
+        }
+
+        [Fact]
+        public void GIVEN_InputWitNumbersGreatarThanOneThousand_WHEN_Adding_THEN_ReturnSumOfNumbersWihtoutIncludingNumbersGreaterThanOneThousand()
+        {
+            // Arrange
+            string inputNumbers = "1;2;2000";
+            int expectedResult = 3;
+            _stringParserMock.Setup(s => s.Parse(inputNumbers)).Returns(new int[] { 1, 2 });
+
+            // Act
+            int result = _calculator.Add(inputNumbers);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
         }
     }
 }

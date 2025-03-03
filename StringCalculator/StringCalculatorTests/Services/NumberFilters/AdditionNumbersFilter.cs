@@ -27,5 +27,19 @@ namespace StringCalculatorTests.Services.NumberFilters
             var ex = Assert.Throws<ArgumentException>(() => _additionNumbersFilter.FilterOutInvalidNumbers(inputNumbers));
             Assert.Equal("negatives not allowed -2,-5", ex.Message);
         }
+
+        [Fact]
+        public void GIVEN_InputWitNumbersGreatarThanOneThousand_WHEN_FilteringOutInvalidNumbers_THEN_FilterOutNumberGreaterThanOneThousandAndReturnTheRemainingNumbers()
+        {
+            // Arrange
+            int[] inputNumbers = new int[] { 1, 1002, 5 };
+            int[] expectedResult = new int[] { 1, 5 };
+
+            // Act
+            int[] result = _additionNumbersFilter.FilterOutInvalidNumbers(inputNumbers);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
     }
 }
