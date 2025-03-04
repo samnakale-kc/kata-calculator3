@@ -54,7 +54,7 @@ namespace StringCalculatorTests.Services.Delimiters
         }
 
         [Fact]
-        public void GIVEN_InputWithNegativeNumbers_WHEN_Parsing_THEN_ReturnNumbers()
+        public void GIVEN_InputWithNegativeNumbers_WHEN_GettingNumbersFromDelimitedString_THEN_ReturnNumbers()
         {
             // Arrange
             string inputNumbers = "1;-2;-5";
@@ -68,7 +68,7 @@ namespace StringCalculatorTests.Services.Delimiters
         }
 
         [Fact]
-        public void GIVEN_InputWithNumbersGreaterThanOneThousand_WHEN_Parsing_THEN_ReturnNumbers()
+        public void GIVEN_InputWithNumbersGreaterThanOneThousand_WHEN_GettingNumbersFromDelimitedString_THEN_ReturnNumbers()
         {
             // Arrange
             string inputNumbers = "1;-2;2000";
