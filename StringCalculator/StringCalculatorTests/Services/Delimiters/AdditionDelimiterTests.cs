@@ -68,11 +68,25 @@ namespace StringCalculatorTests.Services.Delimiters
         }
 
         [Fact]
-        public void GIVEN_InputWitNumbersGreaterThanOneThousand_WHEN_Parsing_THEN_ReturnNumbers()
+        public void GIVEN_InputWithNumbersGreaterThanOneThousand_WHEN_Parsing_THEN_ReturnNumbers()
         {
             // Arrange
             string inputNumbers = "1;-2;2000";
             string[] expectedResult = new string[] { "1", "-2", "2000" };
+
+            // Act
+            string[] result = _additionDelimeter.GetNumbersFromDelimitedString(inputNumbers);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Fact]
+        public void GIVEN_InputWithDelimiterOfAnyLength_WHEN_GettingNumbersFromDelimitedString_THEN_ReturnNumbers()
+        {
+            // Arrange
+            string inputNumbers = "//***\n1***2***3";
+            string[] expectedResult = new string[] { "1", "2", "3" };
 
             // Act
             string[] result = _additionDelimeter.GetNumbersFromDelimitedString(inputNumbers);

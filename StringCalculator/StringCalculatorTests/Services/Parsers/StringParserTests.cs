@@ -112,5 +112,22 @@ namespace StringCalculatorTests.Services.Parsers
             var ex = Assert.Throws<ArgumentException>(() => _stringParser.Parse(inputNumbers));
             Assert.Equal("negatives not allowed -2,-5", ex.Message);
         }
+
+        [Fact]
+        public void GIVEN_InputWithDelimiterOfAnyLength_WHEN_Parsing_THEN_ReturnNumbers()
+        {
+            // Arrange
+            string inputNumbers = "//***\n1***2***3";
+            int[] expectedResult = new int[] { 1, 2, 3 };
+            string[] expectedNumbersFromDelimeterService = new string[] { "1", "2", "3" };
+            _additionDelimiterServiceMock.Setup(s => s.GetNumbersFromDelimitedString(inputNumbers)).Returns(expectedNumbersFromDelimeterService);
+            _additionNumbersFilterServiceMock.Setup(s => s.FilterOutInvalidNumbers(expectedResult)).Returns(expectedResult);
+
+            // Act
+            int[] result = _stringParser.Parse(inputNumbers);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
     }
 }
