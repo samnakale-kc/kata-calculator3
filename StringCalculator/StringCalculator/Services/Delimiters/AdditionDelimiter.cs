@@ -38,24 +38,24 @@ namespace StringCalculator.Services.Delimiters
 
         private bool InputHasMultipleDelimiters(string input)
         {
-            string startsOfDelimeterLine = CustomDelimiterPrefix + MultiCharacterDelimeterStartString;
-            string endOfDelimeterLine = MultiCharacterDelimeterEndString + NewLineCharacter;
+            string startOfDelimiterLine = CustomDelimiterPrefix + MultiCharacterDelimeterStartString;
+            string endOfDelimiterLine = MultiCharacterDelimeterEndString + NewLineCharacter;
 
-            return input.StartsWith(startsOfDelimeterLine) && input.Contains(endOfDelimeterLine);
+            return input.StartsWith(startOfDelimiterLine) && input.Contains(endOfDelimiterLine);
         }
 
         private string[] GetCustomDelimitersFromInputWithMultipleDelimiters(string input)
         {
-            string firstLine = input.Split(NewLineCharacter)[0].Replace(CustomDelimiterPrefix, string.Empty);
+            string firstLine = input.Split(NewLineCharacter)[0];
+            string firstLineWithoutPrefix = firstLine.Replace(CustomDelimiterPrefix, string.Empty);
 
-            string[] delimeters = firstLine.Split(MultiCharacterDelimeterEndString, StringSplitOptions.RemoveEmptyEntries);
+            string[] delimeters = firstLineWithoutPrefix.Split(MultiCharacterDelimeterEndString, StringSplitOptions.RemoveEmptyEntries);
 
 
             for (int i = 0; i < delimeters.Length; i++)
             {
                 string delimeter = delimeters[i];
                 string cleanDelimeter = delimeter.Replace(MultiCharacterDelimeterStartString, string.Empty).Replace(MultiCharacterDelimeterEndString, string.Empty);
-
                 delimeters[i] = cleanDelimeter;
             }
 
@@ -74,11 +74,6 @@ namespace StringCalculator.Services.Delimiters
 
         private string ExtractInputWithoutFirstLine(string input)
         {
-            if (!HasCustomDelimiterLine(input))
-            {
-                return input;
-            }
-
             var stringSections = input.Split(NewLineCharacter).ToList();
             stringSections.RemoveAt(0); // Removes the first line directly
 
