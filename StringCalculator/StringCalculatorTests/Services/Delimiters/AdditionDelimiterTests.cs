@@ -94,5 +94,19 @@ namespace StringCalculatorTests.Services.Delimiters
             // Assert
             Assert.Equal(expectedResult, result);
         }
+
+        [Fact]
+        public void GIVEN_InputWithMultipleDelimiters_WHEN_GettingNumbersFromDelimitedString_THEN_ReturnNumbers()
+        {
+            // Arrange
+            string inputNumbers = "//[*][%]\n1*2%3";
+            string[] expectedResult = new string[] { "1", "2", "3" };
+
+            // Act
+            string[] result = _additionDelimeter.GetNumbersFromDelimitedString(inputNumbers);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
     }
 }
