@@ -135,5 +135,33 @@ namespace StringCalculatorTests
             // Assert
             Assert.Equal(expectedResult, result);
         }
+
+        [Fact]
+        public void GIVEN_InputWithZeroNumbers_WHEN_Subtracting_THEN_ReturnDifference()
+        {
+            // Arrange
+            string input = string.Empty;
+            int expectedResult = 0;
+
+            //Act
+            int result = _calculator.Subtract(input);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Theory]
+        [InlineData("1", -1)]
+        [InlineData("1,2", -3)]
+        public void GIVEN_InputWithOneOrTwoNumbers_WHEN_Subtracting_THEN_ReturnDifference(string input, int expectedResult)
+        {
+            // Arrange
+
+            // Act
+            int result = _calculator.Subtract(input);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
     }
 }

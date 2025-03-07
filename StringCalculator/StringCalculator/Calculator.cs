@@ -23,5 +23,10 @@ namespace StringCalculator
 
             return sum;
         }
+
+        public int Subtract(string numbers)
+        {
+            return 99;
+        }
     }
 }
