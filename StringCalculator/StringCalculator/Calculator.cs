@@ -1,4 +1,5 @@
 ﻿using StringCalculator.Services.Parsers;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace StringCalculator
 {
@@ -26,7 +27,20 @@ namespace StringCalculator
 
         public int Subtract(string numbers)
         {
-            return 99;
+            if (string.IsNullOrEmpty(numbers))
+            {
+                return 0;
+            }
+
+            int result = 0;
+            string[] numbersArray = numbers.Split(',');
+
+            foreach (string number in numbersArray)
+            {
+                result -= int.Parse(number);
+            }
+
+            return result;
         }
     }
 }
