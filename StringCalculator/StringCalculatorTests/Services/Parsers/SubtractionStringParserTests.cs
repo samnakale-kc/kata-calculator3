@@ -59,5 +59,37 @@ namespace StringCalculatorTests.Services.Parsers
             // Assert
             Assert.Equal(result, expectedResult);
         }
+
+        [Fact]
+        public void GIVEN_InputWithCustomDelimeterDefinedOnFirstLine_WHEN_Parsing_THEN_ReturnListOfIntegers()
+        {
+            // Arrange
+            string input = "##;\n1;2";
+            int[] expectedResult = new int[] { 1, 2 };
+            string[] expectedDelimiterServiceResponse = new string[] { "1", "2" };
+            _delimiterServiceMock.Setup(x => x.GetNumbersFromDelimitedString(input)).Returns(expectedDelimiterServiceResponse);
+
+            // Act
+            int[] result = _stringParser.Parse(input);
+
+            // Assert
+            Assert.Equal(result, expectedResult);
+        }
+
+        [Fact]
+        public void GIVEN_InputWithCustomDelimeterWithoutFirstLine_WHEN_Parsing_THEN_ReturnListOfIntegers()
+        {
+            // Arrange
+            string input = "1;2";
+            int[] expectedResult = new int[] { 1, 2 };
+            string[] expectedDelimiterServiceResponse = new string[] { "1", "2" };
+            _delimiterServiceMock.Setup(x => x.GetNumbersFromDelimitedString(input)).Returns(expectedDelimiterServiceResponse);
+
+            // Act
+            int[] result = _stringParser.Parse(input);
+
+            // Assert
+            Assert.Equal(result, expectedResult);
+        }
     }
 }

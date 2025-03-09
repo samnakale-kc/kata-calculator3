@@ -199,5 +199,35 @@ namespace StringCalculatorTests
             // Assert
             Assert.Equal(result, expectedResult);
         }
+
+        [Fact]
+        public void GIVEN_InputWithCustomDelimeterDefinedOnFirstLine_WHEN_Subtracting_THEN_ReturnDifference()
+        {
+            // Arrange
+            string input = "##;\n1;2";
+            int expectedResult = -3;
+            _stringParserMock.Setup(s => s.Parse("##;\n1;2")).Returns([1, 2]);
+
+            // Act
+            int result = _calculator.Subtract(input);
+
+            // Assert
+            Assert.Equal(result, expectedResult);
+        }
+
+        [Fact]
+        public void GIVEN_InputWithCustomDelimeterWithoutFirstLine_WHEN_Subtracting_THEN_ReturnDifference()
+        {
+            // Arrange
+            string input = "1;2";
+            int expectedResult = -3;
+            _stringParserMock.Setup(s => s.Parse("1;2")).Returns([1, 2]);
+
+            // Act
+            int result = _calculator.Subtract(input);
+
+            // Assert
+            Assert.Equal(result, expectedResult);
+        }
     }
 }
