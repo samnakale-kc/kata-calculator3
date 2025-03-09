@@ -50,7 +50,7 @@ namespace StringCalculatorTests.Services.Delimiters
         {
             // Arrange
             string input = "##;\n1;2";
-            string[] expectedResult = new string[] { "1", "2", "3" };
+            string[] expectedResult = new string[] { "1", "2" };
 
             // Act
             string[] result = _subtractionDelimiter.GetNumbersFromDelimitedString(input);
