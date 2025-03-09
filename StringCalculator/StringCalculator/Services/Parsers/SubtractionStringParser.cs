@@ -31,7 +31,8 @@ namespace StringCalculator.Services.Parsers
 
             for (int i = 0; i < listLength; i++)
             {
-                numbers[i] = int.Parse(numbersArray[i]);
+                int currentNumber = int.Parse(numbersArray[i]);
+                numbers[i] = Math.Abs(currentNumber);
             }
 
             return numbers;
