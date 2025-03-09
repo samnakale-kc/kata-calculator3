@@ -8,37 +8,52 @@ namespace StringCalculator.Services.Delimiters
 {
     public class SubtractionDelimiter : IDelimiter
     {
-        private const string CustomDelimeterNewLineStartString = "##";
+        private const string CustomDelimiterNewLineStartString = "##";
         private const string NewLineCharacter = "\n";
-        private const string MultiCharacterDelimeterStartString = "[";
-        private const string MultiCharacterDelimeterEndString = "]";
+        private const string MultiCharacterDelimiterStartString = "[";
+        private const string MultiCharacterDelimiterEndString = "]";
 
-        private readonly string[] _defaultdelimeters = [",", "\n"];
+        private readonly string[] _defaultDelimiters = [",", "\n"];
 
         public string[] GetNumbersFromDelimitedString(string input)
         {
-            string[] delimetersToSplitStringBy = _defaultdelimeters;
-            bool inputHasFirstLineWithDelimeter = DoesInputHaveFirstLineWithDelimeter(input);
-            bool inputHasCustomDelimeter = DoesInputHaveCustomDelimeter(input);
+            string[] delimitersToSplitStringBy = _defaultDelimiters;
+            bool inputHasFirstLineWithDelimiter = DoesInputHaveFirstLineWithDelimiter(input);
+            bool inputHasCustomDelimiter = DoesInputHaveCustomDelimiter(input);
+            bool inputHasMultipleDelimeters = DoesInputHaveMultipleDelimeters(input);
 
-            if (!inputHasFirstLineWithDelimeter && inputHasCustomDelimeter)
+            if (!inputHasFirstLineWithDelimiter && inputHasCustomDelimiter)
             {
-                string customDelimeter = GetCustomDelimeterFromInputWithoutFirstLine(input);
-                delimetersToSplitStringBy = [customDelimeter];
+                delimitersToSplitStringBy = new string[] { GetCustomDelimiterFromInputWithoutFirstLine(input) };
             }
-            else if (inputHasFirstLineWithDelimeter)
+            else if (inputHasMultipleDelimeters)
             {
-                string customDelimeter = GetCustomDelimeterFromFirstLine(input);
+                delimitersToSplitStringBy = GetCustomDelimitersFromInputWithMultipleDelimiters(input);
+            }
+            else if (inputHasFirstLineWithDelimiter)
+            {
+                delimitersToSplitStringBy = new string[] { GetCustomDelimiterFromFirstLine(input) };
+            }
+
+            if (inputHasFirstLineWithDelimiter || inputHasMultipleDelimeters)
+            {
                 input = RemoveFirstLineFromCustomDelimetedInput(input);
-                delimetersToSplitStringBy = [customDelimeter];
             }
 
-            return input.Split(delimetersToSplitStringBy, StringSplitOptions.RemoveEmptyEntries);
+            return input.Split(delimitersToSplitStringBy, StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        private bool DoesInputHaveMultipleDelimeters(string input)
+        {
+            string startsOfDelimeterLine = CustomDelimiterNewLineStartString + MultiCharacterDelimiterStartString;
+            string endOfDelimeterLine = MultiCharacterDelimiterEndString + NewLineCharacter;
+
+            return input.StartsWith(startsOfDelimeterLine) && input.Contains(endOfDelimeterLine);
         }
 
         private string RemoveFirstLineFromCustomDelimetedInput(string input)
         {
-            if (!DoesInputHaveFirstLineWithDelimeter(input))
+            if (!DoesInputHaveFirstLineWithDelimiter(input))
             {
                 return input;
             }
@@ -49,15 +64,15 @@ namespace StringCalculator.Services.Delimiters
             return string.Join(NewLineCharacter, stringSections);
         }
 
-        private string GetCustomDelimeterFromFirstLine(string input)
+        private string GetCustomDelimiterFromFirstLine(string input)
         {
             return input.Split(NewLineCharacter)[0]
-                .Replace(CustomDelimeterNewLineStartString, string.Empty)
-                .Replace(MultiCharacterDelimeterEndString, string.Empty)
-                .Replace(MultiCharacterDelimeterStartString, string.Empty);
+                .Replace(CustomDelimiterNewLineStartString, string.Empty)
+                .Replace(MultiCharacterDelimiterEndString, string.Empty)
+                .Replace(MultiCharacterDelimiterStartString, string.Empty);
         }
 
-        private string GetCustomDelimeterFromInputWithoutFirstLine(string input)
+        private string GetCustomDelimiterFromInputWithoutFirstLine(string input)
         {
             string delimiter = string.Empty;
 
@@ -79,14 +94,14 @@ namespace StringCalculator.Services.Delimiters
             return delimiter;
         }
 
-        private bool DoesInputHaveCustomDelimeter(string input)
+        private bool DoesInputHaveCustomDelimiter(string input)
         {
-            var defaultDelimetersList = _defaultdelimeters.ToList();
+            var defaultDelimitersList = _defaultDelimiters.ToList();
 
             foreach (char currentInputCharacter in input)
             {
-                bool currentCharIsNotContainedInDefaultDelimeters = defaultDelimetersList.Contains(currentInputCharacter.ToString());
-                if (!char.IsDigit(currentInputCharacter) && !currentCharIsNotContainedInDefaultDelimeters)
+                bool currentCharIsNotContainedInDefaultDelimiters = defaultDelimitersList.Contains(currentInputCharacter.ToString());
+                if (!char.IsDigit(currentInputCharacter) && !currentCharIsNotContainedInDefaultDelimiters)
                 {
                     return true;
                 }
@@ -95,9 +110,27 @@ namespace StringCalculator.Services.Delimiters
             return false;
         }
 
-        private bool DoesInputHaveFirstLineWithDelimeter(string input)
+        private bool DoesInputHaveFirstLineWithDelimiter(string input)
         {
-            return input.StartsWith(CustomDelimeterNewLineStartString) && input.Contains(NewLineCharacter);
+            return input.StartsWith(CustomDelimiterNewLineStartString) && input.Contains(NewLineCharacter);
+        }
+
+        private string[] GetCustomDelimitersFromInputWithMultipleDelimiters(string input)
+        {
+            string firstLine = input.Split(NewLineCharacter)[0].Replace(CustomDelimiterNewLineStartString, string.Empty);
+
+            string[] delimiters = firstLine.Split(MultiCharacterDelimiterEndString, StringSplitOptions.RemoveEmptyEntries);
+
+
+            for (int i = 0; i < delimiters.Length; i++)
+            {
+                string delimiter = delimiters[i];
+                string cleanDelimiter = delimiter.Replace(MultiCharacterDelimiterStartString, string.Empty).Replace(MultiCharacterDelimiterEndString, string.Empty);
+
+                delimiters[i] = cleanDelimiter;
+            }
+
+            return delimiters;
         }
     }
 }
