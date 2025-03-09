@@ -107,5 +107,18 @@ namespace StringCalculatorTests.Services.Parsers
             // Assert
             Assert.Equal(result, expectedResult);
         }
+
+        [Fact]
+        public void GIVEN_InputWithNumbersGreaterThanOneThousand_WHEN_Parsing_THEN_ThrowAnException()
+        {
+            // Arrange
+            string inputNumbers = "1001;-2;-5";
+            string[] expectedNumbersFromDelimeterService = ["1001", "-2", "-5"];
+            _delimiterServiceMock.Setup(s => s.GetNumbersFromDelimitedString(inputNumbers)).Returns(expectedNumbersFromDelimeterService);
+
+            // Act & Assert
+            var ex = Assert.Throws<Exception>(() => _stringParser.Parse(inputNumbers));
+            Assert.Equal("Numbers greater than 1000 not allowed: -1001", ex.Message);
+        }
     }
 }
