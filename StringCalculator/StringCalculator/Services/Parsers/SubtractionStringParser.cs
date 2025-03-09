@@ -12,9 +12,9 @@ namespace StringCalculator.Services.Parsers
         private readonly int[] _defaultListWhenEmptyString = new int[0];
         private readonly IDelimiter _delimiterService;
 
-        public SubtractionStringParser(IDelimiter delimeterService) 
+        public SubtractionStringParser(IDelimiter delimiterService) 
         {
-            _delimiterService = delimeterService;
+            _delimiterService = delimiterService;
         }
 
         public int[] Parse(string input)

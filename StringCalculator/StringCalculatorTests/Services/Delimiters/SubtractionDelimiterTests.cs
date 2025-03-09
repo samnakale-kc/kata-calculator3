@@ -9,11 +9,11 @@ namespace StringCalculatorTests.Services.Delimiters
 {
     public class SubtractionDelimiterTests
     {
-        private SubtractionDelimiter _subtractionDelimeter;
+        private SubtractionDelimiter _subtractionDelimiter;
 
         public SubtractionDelimiterTests()
         {
-            _subtractionDelimeter = new SubtractionDelimiter();
+            _subtractionDelimiter = new SubtractionDelimiter();
         }
 
         [Fact]
@@ -24,7 +24,7 @@ namespace StringCalculatorTests.Services.Delimiters
             string[] expectedResult = new string[] { "1", "2", "3" };
 
             // Act
-            string[] result = _subtractionDelimeter.GetNumbersFromDelimitedString(input);
+            string[] result = _subtractionDelimiter.GetNumbersFromDelimitedString(input);
 
             // Assert
             Assert.Equal(expectedResult, result);
@@ -38,7 +38,7 @@ namespace StringCalculatorTests.Services.Delimiters
             string[] expectedResult = new string[] { "1", "2", "3" };
 
             // Act
-            string[] result = _subtractionDelimeter.GetNumbersFromDelimitedString(input);
+            string[] result = _subtractionDelimiter.GetNumbersFromDelimitedString(input);
 
             // Assert
             Assert.Equal(expectedResult, result);
