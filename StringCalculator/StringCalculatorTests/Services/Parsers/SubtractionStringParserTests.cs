@@ -1,34 +1,44 @@
-﻿using StringCalculator.Services.Parsers;
+﻿using Moq;
+using StringCalculator.Services.Delimiters;
+using StringCalculator.Services.Parsers;
 
 namespace StringCalculatorTests.Services.Parsers
 {
     public class SubtractionStringParserTests
     {
+        private readonly SubtractionStringParser _stringParser;
+        private readonly Mock<IDelimiter> _delimiterServiceMock;
+
+        public SubtractionStringParserTests() 
+        {
+            _delimiterServiceMock = new Mock<IDelimiter>();
+            _stringParser = new SubtractionStringParser(_delimiterServiceMock.Object);
+        }
+
         [Fact]
         public void GIVEN_EmptyString_WHEN_Parsing_THEN_ReturnAListWithNoNumbers()
         {
             // Arrange
             string numbers = string.Empty;
             int[] expectedResult = new int[0];
-            var stringParser = new SubtractionStringParser();
 
             // Act
-            int[] result = stringParser.Parse(numbers);
+            int[] result = _stringParser.Parse(numbers);
 
             // Assert
             Assert.Equal(expectedResult, result);
         }
 
         [Theory]
-        [InlineData("1", new int[] { 1 })]
-        [InlineData("1,2", new int[] { 1, 2 })]
-        public void GIVEN_OneOrTwoNumbers_WHEN_Parsing_THEN_ReturnListOfNumbers(string numbers, int[] expectedResult)
+        [InlineData("1", new string[] { "1"}, new int[] { 1 })]
+        [InlineData("1,2", new string[] { "1", "2" }, new int[] { 1, 2 })]
+        public void GIVEN_OneOrTwoNumbers_WHEN_Parsing_THEN_ReturnListOfNumbers(string numbers, string[] expectedDelimiterServiceResponse, int[] expectedResult)
         {
             // Arrange
-            var stringParser = new SubtractionStringParser();
+            _delimiterServiceMock.Setup(x => x.GetNumbersFromDelimitedString(numbers)).Returns(expectedDelimiterServiceResponse);
 
             // Act
-            int[] result = stringParser.Parse(numbers);
+            int[] result = _stringParser.Parse(numbers);
 
             // Assert
             Assert.Equal(expectedResult, result);
@@ -39,11 +49,12 @@ namespace StringCalculatorTests.Services.Parsers
         {
             // Arrange
             string input = "1\n2,3";
+            string[] expectedDelimiterServiceResponse = new string[] { "1", "2", "3" };
             int[] expectedResult = new int[] { 1, 2, 3 };
-            var stringParser = new SubtractionStringParser();
+            _delimiterServiceMock.Setup(x => x.GetNumbersFromDelimitedString(input)).Returns(expectedDelimiterServiceResponse);
 
             // Act
-            int[] result = stringParser.Parse(input);
+            int[] result = _stringParser.Parse(input);
 
             // Assert
             Assert.Equal(result, expectedResult);

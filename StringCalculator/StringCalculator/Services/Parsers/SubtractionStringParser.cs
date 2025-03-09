@@ -3,12 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StringCalculator.Services.Delimiters;
 
 namespace StringCalculator.Services.Parsers
 {
     public class SubtractionStringParser : IStringParser
     {
         private readonly int[] _defaultListWhenEmptyString = new int[0];
+        private readonly IDelimiter _delimiterService;
+
+        public SubtractionStringParser(IDelimiter delimeterService) 
+        {
+            _delimiterService = delimeterService;
+        }
 
         public int[] Parse(string input)
         {
@@ -17,8 +24,7 @@ namespace StringCalculator.Services.Parsers
                 return _defaultListWhenEmptyString;
             }
 
-            string[] delimeters = [",", "\n"];
-            string[] numbersArray = input.Split(delimeters, StringSplitOptions.RemoveEmptyEntries);
+            string[] numbersArray = _delimiterService.GetNumbersFromDelimitedString(input);
 
             int listLength = numbersArray.Length;
             int[] numbers = new int[listLength];
