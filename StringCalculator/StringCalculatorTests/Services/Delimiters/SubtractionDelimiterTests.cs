@@ -86,5 +86,33 @@ namespace StringCalculatorTests.Services.Delimiters
             // Assert
             Assert.Equal(expectedResult, result);
         }
+
+        [Fact]
+        public void GIVEN_CustomDelimetedInputOfMoreThanOneCharacterWithFirstLine_WHEN_GettingNumbersFromDelimetedString_THEN_ReturnNumbers()
+        {
+            // Arrange
+            string inputNumbers = "##;*;\n1;*;2";
+            string[] expectedResult = ["1", "2"];
+
+            // Act
+            string[] result = _subtractionDelimiter.GetNumbersFromDelimitedString(inputNumbers);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Fact]
+        public void GIVEN_CustomDelimetedInputOfMoreThanOneCharacterWithoutFirstLine_WHEN_GettingNumbersFromDelimetedString_THEN_ReturnNumbers()
+        {
+            // Arrange
+            string inputNumbers = "1;*;2";
+            string[] expectedResult = ["1", "2"];
+
+            // Act
+            string[] result = _subtractionDelimiter.GetNumbersFromDelimitedString(inputNumbers);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
     }
 }

@@ -130,5 +130,39 @@ namespace StringCalculatorTests.Services.Parsers
             var ex = Assert.Throws<Exception>(() => _stringParser.Parse(inputNumbers));
             Assert.Equal("Numbers greater than 1000 not allowed: 1001", ex.Message);
         }
+
+        [Fact]
+        public void GIVEN_InputWithCustomDelimeterOfMoreThanOneCharacterDefinedOnFirstLine_WHEN_Parsing_THEN_ReturnListOfIntegers()
+        {
+            // Arrange
+            string input = "##;;\n1;;2";
+            int[] expectedResult = new int[] { 1, 2 };
+            string[] expectedNumbersFromDelimeterService = ["1", "2"];
+            _delimiterServiceMock.Setup(s => s.GetNumbersFromDelimitedString(input)).Returns(expectedNumbersFromDelimeterService);
+            _numbersFilterServiceMock.Setup(s => s.FilterOutInvalidNumbers(It.IsAny<int[]>())).Returns(expectedResult);
+
+            // Act
+            int[] result = _stringParser.Parse(input);
+
+            // Assert
+            Assert.Equal(result, expectedResult);
+        }
+
+        [Fact]
+        public void GIVEN_InputWithCustomDelimeterrOfMoreThanOneCharacterWithoutFirstLine_WHEN_Parsing_THEN_ReturnListOfIntegers()
+        {
+            // Arrange
+            string input = "1;;;2";
+            int[] expectedResult = new int[] { 1, 2 };
+            string[] expectedNumbersFromDelimeterService = ["1", "2"];
+            _delimiterServiceMock.Setup(s => s.GetNumbersFromDelimitedString(input)).Returns(expectedNumbersFromDelimeterService);
+            _numbersFilterServiceMock.Setup(s => s.FilterOutInvalidNumbers(It.IsAny<int[]>())).Returns(expectedResult);
+
+            // Act
+            int[] result = _stringParser.Parse(input);
+
+            // Assert
+            Assert.Equal(result, expectedResult);
+        }
     }
 }
