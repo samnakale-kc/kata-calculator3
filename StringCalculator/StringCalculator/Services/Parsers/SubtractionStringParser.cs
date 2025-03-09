@@ -17,7 +17,9 @@ namespace StringCalculator.Services.Parsers
                 return _defaultListWhenEmptyString;
             }
 
-            string[] numbersArray = input.Split(',');
+            string[] delimeters = [",", "\n"];
+            string[] numbersArray = input.Split(delimeters, StringSplitOptions.RemoveEmptyEntries);
+
             int listLength = numbersArray.Length;
             int[] numbers = new int[listLength];
 
