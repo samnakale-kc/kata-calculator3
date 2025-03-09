@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StringCalculator.Services.Delimiters;
+using StringCalculator.Services.NumberFilters;
 
 namespace StringCalculator.Services.Parsers
 {
@@ -11,10 +12,12 @@ namespace StringCalculator.Services.Parsers
     {
         private readonly int[] _defaultListWhenEmptyString = new int[0];
         private readonly IDelimiter _delimiterService;
+        private readonly IFilterNumbers _numberFilterService;
 
-        public SubtractionStringParser(IDelimiter delimiterService) 
+        public SubtractionStringParser(IDelimiter delimiterService, IFilterNumbers numbersFilterService) 
         {
             _delimiterService = delimiterService;
+            _numberFilterService = numbersFilterService;
         }
 
         public int[] Parse(string input)
@@ -35,7 +38,7 @@ namespace StringCalculator.Services.Parsers
                 numbers[i] = Math.Abs(currentNumber);
             }
 
-            return numbers;
+            return _numberFilterService.FilterOutInvalidNumbers(numbers);
         }
     }
 }

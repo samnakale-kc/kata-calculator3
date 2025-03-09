@@ -15,7 +15,7 @@ namespace StringCalculator.Services.Parsers
             return type switch
             {
                 ParserType.ADDITION => new AdditionStringParser(new AdditionDelimiter(), new AdditionNumbersFilter()),
-                ParserType.SUBTRACTION => new SubtractionStringParser(new SubtractionDelimiter()),
+                ParserType.SUBTRACTION => new SubtractionStringParser(new SubtractionDelimiter(), new SubtractionNumbersFilter()),
                 _ => throw new ArgumentOutOfRangeException()
             };
         }

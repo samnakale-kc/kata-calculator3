@@ -1,5 +1,6 @@
 ﻿using Moq;
 using StringCalculator.Services.Delimiters;
+using StringCalculator.Services.NumberFilters;
 using StringCalculator.Services.Parsers;
 
 namespace StringCalculatorTests.Services.Parsers
@@ -8,11 +9,14 @@ namespace StringCalculatorTests.Services.Parsers
     {
         private readonly SubtractionStringParser _stringParser;
         private readonly Mock<IDelimiter> _delimiterServiceMock;
+        private readonly Mock<IFilterNumbers> _numbersFilterServiceMock;
 
         public SubtractionStringParserTests()
         {
             _delimiterServiceMock = new Mock<IDelimiter>();
-            _stringParser = new SubtractionStringParser(_delimiterServiceMock.Object);
+            _numbersFilterServiceMock = new Mock<IFilterNumbers>();
+
+            _stringParser = new SubtractionStringParser(_delimiterServiceMock.Object, _numbersFilterServiceMock.Object);
         }
 
         [Fact]
@@ -36,6 +40,7 @@ namespace StringCalculatorTests.Services.Parsers
         {
             // Arrange
             _delimiterServiceMock.Setup(x => x.GetNumbersFromDelimitedString(numbers)).Returns(expectedDelimiterServiceResponse);
+            _numbersFilterServiceMock.Setup(x => x.FilterOutInvalidNumbers(expectedResult)).Returns(expectedResult);
 
             // Act
             int[] result = _stringParser.Parse(numbers);
@@ -52,6 +57,7 @@ namespace StringCalculatorTests.Services.Parsers
             string[] expectedDelimiterServiceResponse = new string[] { "1", "2", "3" };
             int[] expectedResult = new int[] { 1, 2, 3 };
             _delimiterServiceMock.Setup(x => x.GetNumbersFromDelimitedString(input)).Returns(expectedDelimiterServiceResponse);
+            _numbersFilterServiceMock.Setup(x => x.FilterOutInvalidNumbers(expectedResult)).Returns(expectedResult);
 
             // Act
             int[] result = _stringParser.Parse(input);
@@ -68,6 +74,7 @@ namespace StringCalculatorTests.Services.Parsers
             int[] expectedResult = new int[] { 1, 2 };
             string[] expectedDelimiterServiceResponse = new string[] { "1", "2" };
             _delimiterServiceMock.Setup(x => x.GetNumbersFromDelimitedString(input)).Returns(expectedDelimiterServiceResponse);
+            _numbersFilterServiceMock.Setup(x => x.FilterOutInvalidNumbers(expectedResult)).Returns(expectedResult);
 
             // Act
             int[] result = _stringParser.Parse(input);
@@ -84,6 +91,7 @@ namespace StringCalculatorTests.Services.Parsers
             int[] expectedResult = new int[] { 1, 2 };
             string[] expectedDelimiterServiceResponse = new string[] { "1", "2" };
             _delimiterServiceMock.Setup(x => x.GetNumbersFromDelimitedString(input)).Returns(expectedDelimiterServiceResponse);
+            _numbersFilterServiceMock.Setup(x => x.FilterOutInvalidNumbers(expectedResult)).Returns(expectedResult);
 
             // Act
             int[] result = _stringParser.Parse(input);
@@ -100,6 +108,7 @@ namespace StringCalculatorTests.Services.Parsers
             int[] expectedResult = new int[] { 10, 2 };
             string[] expectedNumbersFromDelimeterService = ["10", "-2"];
             _delimiterServiceMock.Setup(s => s.GetNumbersFromDelimitedString(input)).Returns(expectedNumbersFromDelimeterService);
+            _numbersFilterServiceMock.Setup(x => x.FilterOutInvalidNumbers(expectedResult)).Returns(expectedResult);
 
             // Act
             int[] result = _stringParser.Parse(input);
@@ -115,10 +124,11 @@ namespace StringCalculatorTests.Services.Parsers
             string inputNumbers = "1001;-2;-5";
             string[] expectedNumbersFromDelimeterService = ["1001", "-2", "-5"];
             _delimiterServiceMock.Setup(s => s.GetNumbersFromDelimitedString(inputNumbers)).Returns(expectedNumbersFromDelimeterService);
+            _numbersFilterServiceMock.Setup(x => x.FilterOutInvalidNumbers(It.IsAny<int[]>())).Throws(new Exception("Numbers greater than 1000 not allowed: 1001"));
 
             // Act & Assert
             var ex = Assert.Throws<Exception>(() => _stringParser.Parse(inputNumbers));
-            Assert.Equal("Numbers greater than 1000 not allowed: -1001", ex.Message);
+            Assert.Equal("Numbers greater than 1000 not allowed: 1001", ex.Message);
         }
     }
 }

@@ -244,5 +244,17 @@ namespace StringCalculatorTests
             // Assert
             Assert.Equal(result, expectedResult);
         }
+
+        [Fact]
+        public void GIVEN_InputWithNumbersGreaterThanOneThousand_WHEN_Parsing_THEN_ThrowAnException()
+        {
+            // Arrange
+            string inputNumbers = "1001;-2;-5";
+            _stringParserMock.Setup(s => s.Parse(It.IsAny<string>())).Throws(new Exception("Numbers greater than 1000 not allowed: 1001"));
+
+            // Act & Assert
+            var ex = Assert.Throws<Exception>(() => _calculator.Subtract(inputNumbers));
+            Assert.Equal("Numbers greater than 1000 not allowed: 1001", ex.Message);
+        }
     }
 }
