@@ -6,13 +6,13 @@ using StringCalculator.Services.Parsers;
 
 namespace StringCalculatorTests.Services.Parsers
 {
-    public class StringParserTests
+    public class AdditionStringParserTests
     {
         AdditionStringParser _stringParser;
         Mock<IDelimiter> _additionDelimiterServiceMock;
         Mock<IFilterNumbers> _additionNumbersFilterServiceMock;
 
-        public StringParserTests()
+        public AdditionStringParserTests()
         {
             _additionDelimiterServiceMock = new Mock<IDelimiter>();
             _additionNumbersFilterServiceMock = new Mock<IFilterNumbers>();

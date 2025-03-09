@@ -16,6 +16,7 @@ namespace StringCalculator.Services.Parsers
             {
                 ParserType.ADDITION => new AdditionStringParser(new AdditionDelimiter(), new AdditionNumbersFilter()),
                 ParserType.SUBTRACTION => new SubtractionStringParser(),
+                _ => throw new ArgumentOutOfRangeException()
             };
         }
     }
