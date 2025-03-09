@@ -184,5 +184,20 @@ namespace StringCalculatorTests
             // Assert
             Assert.Equal(expectedResult, result);
         }
+
+        [Fact]
+        public void GIVEN_InputSeparatedByNewLine_WHEN_Subtracting_THEN_ReturnDifference()
+        {
+            // Arrange
+            string input = "1\n2,3";
+            int expectedResult = -6;
+            _stringParserMock.Setup(s => s.Parse("1\n2,3")).Returns([1, 2, 3]);
+
+            // Act
+            int result = _calculator.Subtract(input);
+
+            // Assert
+            Assert.Equal(result, expectedResult);
+        }
     }
 }

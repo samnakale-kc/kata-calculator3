@@ -33,5 +33,20 @@ namespace StringCalculatorTests.Services.Parsers
             // Assert
             Assert.Equal(expectedResult, result);
         }
+
+        [Fact]
+        public void GIVEN_InputSeparatedByNewLine_WHEN_Parsing_THEN_ReturnListOfIntegers()
+        {
+            // Arrange
+            string input = "1\n2,3";
+            int[] expectedResult = new int[] { 1, 2, 3 };
+            var stringParser = new SubtractionStringParser();
+
+            // Act
+            int[] result = stringParser.Parse(input);
+
+            // Assert
+            Assert.Equal(result, expectedResult);
+        }
     }
 }
