@@ -12,7 +12,10 @@ namespace StringCalculatorTests
         public CalculatorTests() 
         {
             _stringParserMock = new Mock<IStringParser>();
-            _calculator = new Calculator( _stringParserMock.Object );
+            var stringParserFactoryMock = new Mock<IParserFactory>();
+            stringParserFactoryMock.Setup(x => x.Create(It.IsAny<ParserType>())).Returns(_stringParserMock.Object);
+            
+            _calculator = new Calculator(stringParserFactoryMock.Object);
         }
 
         [Fact]
@@ -156,6 +159,8 @@ namespace StringCalculatorTests
         public void GIVEN_InputWithOneOrTwoNumbers_WHEN_Subtracting_THEN_ReturnDifference(string input, int expectedResult)
         {
             // Arrange
+            _stringParserMock.Setup(s => s.Parse("1")).Returns(new int[] { 1 });
+            _stringParserMock.Setup(s => s.Parse("1,2")).Returns(new int[] { 1, 2 });
 
             // Act
             int result = _calculator.Subtract(input);

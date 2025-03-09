@@ -1,20 +1,20 @@
 ﻿using StringCalculator.Services.Parsers;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace StringCalculator
 {
     public class Calculator
     {
-        private IStringParser _stringParser;
+        private IParserFactory _stringParserFactory;
 
-        public Calculator(IStringParser parser) 
+        public Calculator(IParserFactory parserFactory) 
         {
-            _stringParser = parser;
+            _stringParserFactory = parserFactory;
         }
 
         public int Add(string numbers)
         {
-            int[] inputs = _stringParser.Parse(numbers);
+            var parser = _stringParserFactory.Create(ParserType.ADDITION);
+            int[] inputs = parser.Parse(numbers);
             int sum = 0;
 
             for (int i = 0; i < inputs.Length; i++)
@@ -27,17 +27,14 @@ namespace StringCalculator
 
         public int Subtract(string numbers)
         {
-            if (string.IsNullOrEmpty(numbers))
-            {
-                return 0;
-            }
+            var parser = _stringParserFactory.Create(ParserType.SUBTRACTION);
+            int[] numbersList = parser.Parse(numbers);
 
             int result = 0;
-            string[] numbersArray = numbers.Split(',');
 
-            foreach (string number in numbersArray)
+            foreach (int number in numbersList)
             {
-                result -= int.Parse(number);
+                result -= number;
             }
 
             return result;

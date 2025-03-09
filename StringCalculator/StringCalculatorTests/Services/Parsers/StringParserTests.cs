@@ -8,7 +8,7 @@ namespace StringCalculatorTests.Services.Parsers
 {
     public class StringParserTests
     {
-        StringParser _stringParser;
+        AdditionStringParser _stringParser;
         Mock<IDelimiter> _additionDelimiterServiceMock;
         Mock<IFilterNumbers> _additionNumbersFilterServiceMock;
 
@@ -16,7 +16,7 @@ namespace StringCalculatorTests.Services.Parsers
         {
             _additionDelimiterServiceMock = new Mock<IDelimiter>();
             _additionNumbersFilterServiceMock = new Mock<IFilterNumbers>();
-            _stringParser = new StringParser(_additionDelimiterServiceMock.Object, _additionNumbersFilterServiceMock.Object);
+            _stringParser = new AdditionStringParser(_additionDelimiterServiceMock.Object, _additionNumbersFilterServiceMock.Object);
         }
 
         [Fact]
