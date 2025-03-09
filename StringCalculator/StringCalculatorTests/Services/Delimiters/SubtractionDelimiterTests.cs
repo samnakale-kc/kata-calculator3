@@ -74,7 +74,7 @@ namespace StringCalculatorTests.Services.Delimiters
         }
 
         [Fact]
-        public void GIVEN_InputWithNegativeNumber_WHEN_GettingNumbersFromDelimetedString_THEN_ReturnNumbersIncludingNegativeSign()
+        public void GIVEN_InputWithNegativeNumber_WHEN_GettingNumbersFromDelimitedString_THEN_ReturnNumbersIncludingNegativeSign()
         {
             // Arrange
             string inputNumbers = "10;-2";
@@ -88,7 +88,7 @@ namespace StringCalculatorTests.Services.Delimiters
         }
 
         [Fact]
-        public void GIVEN_CustomDelimetedInputOfMoreThanOneCharacterWithFirstLine_WHEN_GettingNumbersFromDelimetedString_THEN_ReturnNumbers()
+        public void GIVEN_CustomDelimitedInputOfMoreThanOneCharacterWithFirstLine_WHEN_GettingNumbersFromDelimitedString_THEN_ReturnNumbers()
         {
             // Arrange
             string inputNumbers = "##;*;\n1;*;2";
@@ -102,11 +102,39 @@ namespace StringCalculatorTests.Services.Delimiters
         }
 
         [Fact]
-        public void GIVEN_CustomDelimetedInputOfMoreThanOneCharacterWithoutFirstLine_WHEN_GettingNumbersFromDelimetedString_THEN_ReturnNumbers()
+        public void GIVEN_CustomDelimitedInputOfMoreThanOneCharacterWithoutFirstLine_WHEN_GettingNumbersFromDelimitedString_THEN_ReturnNumbers()
         {
             // Arrange
             string inputNumbers = "1;*;2";
             string[] expectedResult = ["1", "2"];
+
+            // Act
+            string[] result = _subtractionDelimiter.GetNumbersFromDelimitedString(inputNumbers);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Fact]
+        public void GIVEN_CustomDelimitedInputOfMoreThanOneDelimeterWithMoreThanOneCharacterWithFirstLine_WHEN_GettingNumbersFromDelimitedString_THEN_ReturnNumbers()
+        {
+            // Arrange
+            string inputNumbers = "##[***][%%%]\n1***2%%%5";
+            string[] expectedResult = ["1", "2", "5"];
+
+            // Act
+            string[] result = _subtractionDelimiter.GetNumbersFromDelimitedString(inputNumbers);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Fact]
+        public void GIVEN_CustomDelimitedInputOfMoreThanOneDelimeterWithFirstLine_WHEN_GettingNumbersFromDelimitedString_THEN_ReturnNumbers()
+        {
+            // Arrange
+            string inputNumbers = "##[*][%]\n1*2%5";
+            string[] expectedResult = ["1", "2", "5"];
 
             // Act
             string[] result = _subtractionDelimiter.GetNumbersFromDelimitedString(inputNumbers);
