@@ -8,66 +8,96 @@ namespace StringCalculator.Services.Delimiters
 {
     public class SubtractionDelimiter : IDelimiter
     {
-        private const string CustomDelimeterPrefix = "##";
+        private const string CustomDelimeterNewLineStartString = "##";
         private const string NewLineCharacter = "\n";
-        private readonly string[] _defaultDelimiters = { ",", "\n" };
+        private const string MultiCharacterDelimeterStartString = "[";
+        private const string MultiCharacterDelimeterEndString = "]";
+
+        private readonly string[] _defaultdelimeters = [",", "\n"];
 
         public string[] GetNumbersFromDelimitedString(string input)
         {
-            var delimitersToUse = _defaultDelimiters;
+            string[] delimetersToSplitStringBy = _defaultdelimeters;
+            bool inputHasFirstLineWithDelimeter = DoesInputHaveFirstLineWithDelimeter(input);
+            bool inputHasCustomDelimeter = DoesInputHaveCustomDelimeter(input);
 
-            if (HasCustomDelimiterInFirstLine(input))
+            if (!inputHasFirstLineWithDelimeter && inputHasCustomDelimeter)
             {
-                string customDelimiter = GetCustomDelimiterFromFirstLine(input);
-                input = RemoveFirstLineFromInput(input);
-                delimitersToUse = new[] { customDelimiter };
+                string customDelimeter = GetCustomDelimeterFromInputWithoutFirstLine(input);
+                delimetersToSplitStringBy = [customDelimeter];
             }
-            else if (HasCustomDelimiterInBody(input))
+            else if (inputHasFirstLineWithDelimeter)
             {
-                string customDelimiter = GetCustomDelimiterFromBody(input);
-                delimitersToUse = new[] { customDelimiter };
+                string customDelimeter = GetCustomDelimeterFromFirstLine(input);
+                input = RemoveFirstLineFromCustomDelimetedInput(input);
+                delimetersToSplitStringBy = [customDelimeter];
             }
 
-            return input.Split(delimitersToUse, StringSplitOptions.RemoveEmptyEntries);
+            return input.Split(delimetersToSplitStringBy, StringSplitOptions.RemoveEmptyEntries);
         }
 
-        private string RemoveFirstLineFromInput(string input)
+        private string RemoveFirstLineFromCustomDelimetedInput(string input)
         {
-            if (!HasCustomDelimiterInFirstLine(input))
+            if (!DoesInputHaveFirstLineWithDelimeter(input))
             {
                 return input;
             }
 
-            var sections = input.Split(NewLineCharacter).Skip(1); // Skip the first line directly
-            return string.Join(NewLineCharacter, sections);
+            var stringSections = input.Split(NewLineCharacter).ToList();
+            stringSections.RemoveAt(0); // Removes the first line directly
+
+            return string.Join(NewLineCharacter, stringSections);
         }
 
-        private string GetCustomDelimiterFromFirstLine(string input)
+        private string GetCustomDelimeterFromFirstLine(string input)
         {
-            return input.Split(NewLineCharacter)[0].Replace(CustomDelimeterPrefix, string.Empty);
+            return input.Split(NewLineCharacter)[0]
+                .Replace(CustomDelimeterNewLineStartString, string.Empty)
+                .Replace(MultiCharacterDelimeterEndString, string.Empty)
+                .Replace(MultiCharacterDelimeterStartString, string.Empty);
         }
 
-        private string GetCustomDelimiterFromBody(string input)
+        private string GetCustomDelimeterFromInputWithoutFirstLine(string input)
         {
-            foreach (char c in input)
+            string delimiter = string.Empty;
+
+            foreach (char currentInputCharacter in input)
             {
-                if (!char.IsDigit(c) && !_defaultDelimiters.Contains(c.ToString()))
+                bool currentCharacterIsNotNumberAndNotNegativeSign = !char.IsDigit(currentInputCharacter) && currentInputCharacter != '-';
+
+                if (! string.IsNullOrEmpty(delimiter) && !currentCharacterIsNotNumberAndNotNegativeSign)
                 {
-                    return c.ToString();
+                    break;
+                }
+
+                if (currentCharacterIsNotNumberAndNotNegativeSign)
+                {
+                    delimiter += currentInputCharacter.ToString();
                 }
             }
 
-            return string.Empty; // This should not occur under normal conditions
+            return delimiter;
         }
 
-        private bool HasCustomDelimiterInBody(string input)
+        private bool DoesInputHaveCustomDelimeter(string input)
         {
-            return input.Any(c => !char.IsDigit(c) && !_defaultDelimiters.Contains(c.ToString()));
+            var defaultDelimetersList = _defaultdelimeters.ToList();
+
+            foreach (char currentInputCharacter in input)
+            {
+                bool currentCharIsNotContainedInDefaultDelimeters = defaultDelimetersList.Contains(currentInputCharacter.ToString());
+                if (!char.IsDigit(currentInputCharacter) && !currentCharIsNotContainedInDefaultDelimeters)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
-        private bool HasCustomDelimiterInFirstLine(string input)
+        private bool DoesInputHaveFirstLineWithDelimeter(string input)
         {
-            return input.StartsWith(CustomDelimeterPrefix) && input.Contains(NewLineCharacter);
+            return input.StartsWith(CustomDelimeterNewLineStartString) && input.Contains(NewLineCharacter);
         }
     }
 }
