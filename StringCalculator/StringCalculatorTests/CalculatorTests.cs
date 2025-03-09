@@ -168,5 +168,21 @@ namespace StringCalculatorTests
             // Assert
             Assert.Equal(expectedResult, result);
         }
+
+        [Theory]
+        [InlineData("1,2,3,4,5,6,7", new int[] { 1, 2, 3, 4, 5, 6, 7 },  -28)]
+        [InlineData("55,28,39,45", new int[] { 55, 28, 39, 45 }, -167)]
+        public void GIVEN_InputWithUnknownAmountOfNumbers_WHEN_Subtracting_THEN_ReturnDifference(string input, int[] expectedParserResult, int expectedResult)
+        {
+            // Arrange
+            _stringParserMock.Setup(s => s.Parse(input)).Returns(expectedParserResult);
+            _stringParserMock.Setup(s => s.Parse(input)).Returns(expectedParserResult);
+
+            // Act
+            int result = _calculator.Subtract(input);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
     }
 }
