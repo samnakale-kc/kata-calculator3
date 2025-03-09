@@ -105,12 +105,13 @@ namespace StringCalculatorTests.Services.Parsers
             // Arrange
             string inputNumbers = "1;-2;-5";
             string[] expectedNumbersFromDelimeterService = new string[] { "1", "-2", "-5" };
+            string expectedErrorMessage = "negatives not allowed -2,-5";
             _additionDelimiterServiceMock.Setup(s => s.GetNumbersFromDelimitedString(inputNumbers)).Returns(expectedNumbersFromDelimeterService);
             _additionNumbersFilterServiceMock.Setup(s => s.FilterOutInvalidNumbers(new int[] {1, -2, -5})).Throws(new ArgumentException("negatives not allowed -2,-5"));
 
             // Act & Assert
             var ex = Assert.Throws<ArgumentException>(() => _stringParser.Parse(inputNumbers));
-            Assert.Equal("negatives not allowed -2,-5", ex.Message);
+            Assert.Equal(expectedErrorMessage, ex.Message);
         }
 
         [Fact]

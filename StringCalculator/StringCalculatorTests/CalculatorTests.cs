@@ -102,11 +102,12 @@ namespace StringCalculatorTests
             // Arrange
             string inputNumbers = "1;-2;-5";
             string[] expectedNumbersFromDelimeterService = ["1", "-2", "-5"];
+            string expectedErrorMessage = "negatives not allowed -2,-5";
             _stringParserMock.Setup(s => s.Parse(inputNumbers)).Throws(new ArgumentException("negatives not allowed -2,-5"));
 
             // Act & Assert
             var ex = Assert.Throws<ArgumentException>(() => _calculator.Add(inputNumbers));
-            Assert.Equal("negatives not allowed -2,-5", ex.Message);
+            Assert.Equal(expectedErrorMessage, ex.Message);
         }
 
         [Fact]
@@ -250,11 +251,12 @@ namespace StringCalculatorTests
         {
             // Arrange
             string inputNumbers = "1001;-2;-5";
+            string expectedErrorMessage = "Numbers greater than 1000 not allowed: 1001";
             _stringParserMock.Setup(s => s.Parse(It.IsAny<string>())).Throws(new Exception("Numbers greater than 1000 not allowed: 1001"));
 
             // Act & Assert
             var ex = Assert.Throws<Exception>(() => _calculator.Subtract(inputNumbers));
-            Assert.Equal("Numbers greater than 1000 not allowed: 1001", ex.Message);
+            Assert.Equal(expectedErrorMessage, ex.Message);
         }
     }
 }

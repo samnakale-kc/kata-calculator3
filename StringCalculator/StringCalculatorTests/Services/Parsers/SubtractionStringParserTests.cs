@@ -123,12 +123,13 @@ namespace StringCalculatorTests.Services.Parsers
             // Arrange
             string inputNumbers = "1001;-2;-5";
             string[] expectedNumbersFromDelimeterService = ["1001", "-2", "-5"];
+            string expectedErrorMessage = "Numbers greater than 1000 not allowed: 1001";
             _delimiterServiceMock.Setup(s => s.GetNumbersFromDelimitedString(inputNumbers)).Returns(expectedNumbersFromDelimeterService);
             _numbersFilterServiceMock.Setup(x => x.FilterOutInvalidNumbers(It.IsAny<int[]>())).Throws(new Exception("Numbers greater than 1000 not allowed: 1001"));
 
             // Act & Assert
             var ex = Assert.Throws<Exception>(() => _stringParser.Parse(inputNumbers));
-            Assert.Equal("Numbers greater than 1000 not allowed: 1001", ex.Message);
+            Assert.Equal(expectedErrorMessage, ex.Message);
         }
 
         [Fact]
