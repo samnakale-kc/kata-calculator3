@@ -20,7 +20,7 @@ namespace StringCalculatorTests.Services.Parsers
         }
 
         [Fact]
-        public void GIVEN_EmptyString_WHEN_Parsing_THEN_ReturnAListWithNoNumbers()
+        public void GIVEN_EmptyString_WHEN_ParsingNumbers_THEN_ReturnAListWithNoNumbers()
         {
             // Arrange
             string numbers = string.Empty;
@@ -36,7 +36,7 @@ namespace StringCalculatorTests.Services.Parsers
         [Theory]
         [InlineData("1", new string[] { "1" }, new int[] { 1 })]
         [InlineData("1,2", new string[] { "1", "2" }, new int[] { 1, 2 })]
-        public void GIVEN_OneOrTwoNumbers_WHEN_Parsing_THEN_ReturnListOfNumbers(string numbers, string[] expectedDelimiterServiceResponse, int[] expectedResult)
+        public void GIVEN_OneOrTwoNumbers_WHEN_ParsingNumbers_THEN_ReturnListOfNumbers(string numbers, string[] expectedDelimiterServiceResponse, int[] expectedResult)
         {
             // Arrange
             _delimiterServiceMock.Setup(x => x.GetNumbersFromDelimitedString(numbers)).Returns(expectedDelimiterServiceResponse);
@@ -50,7 +50,7 @@ namespace StringCalculatorTests.Services.Parsers
         }
 
         [Fact]
-        public void GIVEN_InputSeparatedByNewLine_WHEN_Parsing_THEN_ReturnListOfIntegers()
+        public void GIVEN_InputSeparatedByNewLine_WHEN_ParsingNumbers_THEN_ReturnListOfIntegers()
         {
             // Arrange
             string input = "1\n2,3";
@@ -67,7 +67,7 @@ namespace StringCalculatorTests.Services.Parsers
         }
 
         [Fact]
-        public void GIVEN_InputWithCustomDelimeterDefinedOnFirstLine_WHEN_Parsing_THEN_ReturnListOfIntegers()
+        public void GIVEN_InputWithCustomDelimeterDefinedOnFirstLine_WHEN_ParsingNumbers_THEN_ReturnListOfIntegers()
         {
             // Arrange
             string input = "##;\n1;2";
@@ -84,7 +84,7 @@ namespace StringCalculatorTests.Services.Parsers
         }
 
         [Fact]
-        public void GIVEN_InputWithCustomDelimeterWithoutFirstLine_WHEN_Parsing_THEN_ReturnListOfIntegers()
+        public void GIVEN_InputWithCustomDelimeterWithoutFirstLine_WHEN_ParsingNumbers_THEN_ReturnListOfIntegers()
         {
             // Arrange
             string input = "1;2";
@@ -101,7 +101,7 @@ namespace StringCalculatorTests.Services.Parsers
         }
 
         [Fact]
-        public void GIVEN_InputWithNegativeNumber_WHEN_Parsing_THEN_ConvertNegativeNumbersToPositiveNumbersAndReturnDifference()
+        public void GIVEN_InputWithNegativeNumber_WHEN_ParsingNumbers_THEN_ConvertNegativeNumbersToPositiveNumbersAndReturnDifference()
         {
             // Arrange
             string input = "10;-2";
@@ -118,7 +118,7 @@ namespace StringCalculatorTests.Services.Parsers
         }
 
         [Fact]
-        public void GIVEN_InputWithNumbersGreaterThanOneThousand_WHEN_Parsing_THEN_ThrowAnException()
+        public void GIVEN_InputWithNumbersGreaterThanOneThousand_WHEN_ParsingNumbers_THEN_ThrowAnException()
         {
             // Arrange
             string inputNumbers = "1001;-2;-5";
@@ -133,7 +133,7 @@ namespace StringCalculatorTests.Services.Parsers
         }
 
         [Fact]
-        public void GIVEN_InputWithCustomDelimeterOfMoreThanOneCharacterDefinedOnFirstLine_WHEN_Parsing_THEN_ReturnListOfIntegers()
+        public void GIVEN_InputWithCustomDelimeterOfMoreThanOneCharacterDefinedOnFirstLine_WHEN_ParsingNumbers_THEN_ReturnListOfIntegers()
         {
             // Arrange
             string input = "##;;\n1;;2";
@@ -150,7 +150,7 @@ namespace StringCalculatorTests.Services.Parsers
         }
 
         [Fact]
-        public void GIVEN_InputWithCustomDelimeterrOfMoreThanOneCharacterWithoutFirstLine_WHEN_Parsing_THEN_ReturnListOfIntegers()
+        public void GIVEN_InputWithCustomDelimeterrOfMoreThanOneCharacterWithoutFirstLine_WHEN_ParsingNumbers_THEN_ReturnListOfIntegers()
         {
             // Arrange
             string input = "1;;;2";

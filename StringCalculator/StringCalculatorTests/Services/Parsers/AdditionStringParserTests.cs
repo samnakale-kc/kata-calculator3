@@ -20,7 +20,7 @@ namespace StringCalculatorTests.Services.Parsers
         }
 
         [Fact]
-        public void GIVEN_EmptyString_WHEN_Parsing_THEN_ReturnAListWithNoNumbers()
+        public void GIVEN_EmptyString_WHEN_ParsingNumbers_THEN_ReturnAListWithNoNumbers()
         {
             // Arrange
             string numbers = string.Empty;
@@ -36,7 +36,7 @@ namespace StringCalculatorTests.Services.Parsers
         [Theory]
         [InlineData("1", new string[] { "1" }, new int[] { 1 })]
         [InlineData("1,2", new string[] { "1", "2" }, new int[] { 1, 2 })]
-        public void GIVEN_OneOrTwoNumbers_WHEN_Parsing_THEN_ReturnListOfNumbers(string numbers, string[] expectedNumbersFromDelimeterService, int[] expectedResult)
+        public void GIVEN_OneOrTwoNumbers_WHEN_ParsingNumbers_THEN_ReturnListOfNumbers(string numbers, string[] expectedNumbersFromDelimeterService, int[] expectedResult)
         {
             // Arrange
             _additionDelimiterServiceMock.Setup(s => s.GetNumbersFromDelimitedString(numbers)).Returns(expectedNumbersFromDelimeterService);
@@ -52,7 +52,7 @@ namespace StringCalculatorTests.Services.Parsers
         [Theory]
         [InlineData("1\n2,3", new string[] { "1", "2", "3" }, new int[] { 1, 2, 3 })]
         [InlineData("1\n2", new string[] { "1", "2" }, new int[] { 1, 2 })]
-        public void GIVEN_AnInputSeparatedByNewLine_WHEN_Parsing_THEN_ReturnListOfNumbers(string numbers, string[] expectedNumbersFromDelimeterService, int[] expectedResult)
+        public void GIVEN_AnInputSeparatedByNewLine_WHEN_ParsingNumbers_THEN_ReturnListOfNumbers(string numbers, string[] expectedNumbersFromDelimeterService, int[] expectedResult)
         {
             // Arrange
             _additionDelimiterServiceMock.Setup(s => s.GetNumbersFromDelimitedString(numbers)).Returns(expectedNumbersFromDelimeterService);
@@ -66,7 +66,7 @@ namespace StringCalculatorTests.Services.Parsers
         }
 
         [Fact]
-        public void GIVEN_CustomDelimetedInput_WHEN_Parsing_THEN_ReturnNumbers()
+        public void GIVEN_CustomDelimetedInput_WHEN_ParsingNumbers_THEN_ReturnNumbers()
         {
             // Arrange
             string inputNumbers = "//;\n1;2";
@@ -83,7 +83,7 @@ namespace StringCalculatorTests.Services.Parsers
         }
 
         [Fact]
-        public void GIVEN_CustomDelimetedInputWithoutFirstLine_WHEN_Parsing_THEN_ReturnNumbers()
+        public void GIVEN_CustomDelimetedInputWithoutFirstLine_WHEN_ParsingNumbers_THEN_ReturnNumbers()
         {
             // Arrange
             string inputNumbers = "1;2";
@@ -100,7 +100,7 @@ namespace StringCalculatorTests.Services.Parsers
         }
 
         [Fact]
-        public void GIVEN_InputWithNegativeNumbers_WHEN_Parsing_THEN_ThrowAnException()
+        public void GIVEN_InputWithNegativeNumbers_WHEN_ParsingNumbers_THEN_ThrowAnException()
         {
             // Arrange
             string inputNumbers = "1;-2;-5";
@@ -115,7 +115,7 @@ namespace StringCalculatorTests.Services.Parsers
         }
 
         [Fact]
-        public void GIVEN_InputWithDelimiterOfAnyLength_WHEN_Parsing_THEN_ReturnNumbers()
+        public void GIVEN_InputWithDelimiterOfAnyLength_WHEN_ParsingNumbers_THEN_ReturnNumbers()
         {
             // Arrange
             string inputNumbers = "//***\n1***2***3";
