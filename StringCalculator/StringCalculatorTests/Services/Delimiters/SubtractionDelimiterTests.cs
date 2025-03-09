@@ -72,5 +72,19 @@ namespace StringCalculatorTests.Services.Delimiters
             // Assert
             Assert.Equal(expectedResult, result);
         }
+
+        [Fact]
+        public void GIVEN_InputWithNegativeNumber_WHEN_GettingNumbersFromDelimetedString_THEN_ReturnNumbersIncludingNegativeSign()
+        {
+            // Arrange
+            string inputNumbers = "10;-2";
+            string[] expectedResult = ["10", "-2"];
+
+            // Act
+            string[] result = _subtractionDelimiter.GetNumbersFromDelimitedString(inputNumbers);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
     }
 }

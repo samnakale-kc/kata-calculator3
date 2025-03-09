@@ -229,5 +229,20 @@ namespace StringCalculatorTests
             // Assert
             Assert.Equal(result, expectedResult);
         }
+
+        [Fact]
+        public void GIVEN_InputWithNegativeNumber_WHEN_Subtracting_THEN_ConvertNegativeNumbersToPositiveNumbersAndReturnDifference()
+        {
+            // Arrange
+            string input = "10;-2";
+            int expectedResult = -12;
+            _stringParserMock.Setup(s => s.Parse(input)).Returns([10, 2]);
+
+            // Act
+            int result = _calculator.Subtract(input);
+
+            // Assert
+            Assert.Equal(result, expectedResult);
+        }
     }
 }

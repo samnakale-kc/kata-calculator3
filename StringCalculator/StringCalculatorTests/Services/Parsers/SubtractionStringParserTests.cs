@@ -9,7 +9,7 @@ namespace StringCalculatorTests.Services.Parsers
         private readonly SubtractionStringParser _stringParser;
         private readonly Mock<IDelimiter> _delimiterServiceMock;
 
-        public SubtractionStringParserTests() 
+        public SubtractionStringParserTests()
         {
             _delimiterServiceMock = new Mock<IDelimiter>();
             _stringParser = new SubtractionStringParser(_delimiterServiceMock.Object);
@@ -30,7 +30,7 @@ namespace StringCalculatorTests.Services.Parsers
         }
 
         [Theory]
-        [InlineData("1", new string[] { "1"}, new int[] { 1 })]
+        [InlineData("1", new string[] { "1" }, new int[] { 1 })]
         [InlineData("1,2", new string[] { "1", "2" }, new int[] { 1, 2 })]
         public void GIVEN_OneOrTwoNumbers_WHEN_Parsing_THEN_ReturnListOfNumbers(string numbers, string[] expectedDelimiterServiceResponse, int[] expectedResult)
         {
@@ -84,6 +84,22 @@ namespace StringCalculatorTests.Services.Parsers
             int[] expectedResult = new int[] { 1, 2 };
             string[] expectedDelimiterServiceResponse = new string[] { "1", "2" };
             _delimiterServiceMock.Setup(x => x.GetNumbersFromDelimitedString(input)).Returns(expectedDelimiterServiceResponse);
+
+            // Act
+            int[] result = _stringParser.Parse(input);
+
+            // Assert
+            Assert.Equal(result, expectedResult);
+        }
+
+        [Fact]
+        public void GIVEN_InputWithNegativeNumber_WHEN_Parsing_THEN_ConvertNegativeNumbersToPositiveNumbersAndReturnDifference()
+        {
+            // Arrange
+            string input = "10;-2";
+            int[] expectedResult = new int[] { 10, 2 };
+            string[] expectedNumbersFromDelimeterService = ["10", "-2"];
+            _delimiterServiceMock.Setup(s => s.GetNumbersFromDelimitedString(input)).Returns(expectedNumbersFromDelimeterService);
 
             // Act
             int[] result = _stringParser.Parse(input);
