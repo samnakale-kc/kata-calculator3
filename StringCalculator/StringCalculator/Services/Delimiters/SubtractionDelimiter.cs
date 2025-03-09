@@ -113,9 +113,10 @@ namespace StringCalculator.Services.Delimiters
             for (int i = 0; i < delimiters.Length; i++)
             {
                 string delimiter = delimiters[i];
-                string cleanDelimiter = delimiter.Replace(MultiCharacterDelimiterStartString, string.Empty).Replace(MultiCharacterDelimiterEndString, string.Empty);
+                string delimiterWithoutStartIdentified = delimiter.Replace(MultiCharacterDelimiterStartString, string.Empty);
+                string delimiterWithoutStartOrEndIdentifier = delimiterWithoutStartIdentified.Replace(MultiCharacterDelimiterEndString, string.Empty);
 
-                delimiters[i] = cleanDelimiter;
+                delimiters[i] = delimiterWithoutStartOrEndIdentifier;
             }
 
             return delimiters;
