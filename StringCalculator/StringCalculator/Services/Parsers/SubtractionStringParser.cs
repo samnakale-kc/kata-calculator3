@@ -10,14 +10,14 @@ namespace StringCalculator.Services.Parsers
 {
     public class SubtractionStringParser : IStringParser
     {
-        private readonly int[] _defaultListWhenEmptyString = new int[0];
+        private readonly int[] _defaultListWhenEmptyString = Array.Empty<int>();
         private readonly IDelimiter _delimiterService;
         private readonly IFilterNumbers _numberFilterService;
 
-        public SubtractionStringParser(IDelimiter delimiterService, IFilterNumbers numbersFilterService) 
+        public SubtractionStringParser(IDelimiter delimiterService, IFilterNumbers numberFilterService)
         {
             _delimiterService = delimiterService;
-            _numberFilterService = numbersFilterService;
+            _numberFilterService = numberFilterService;
         }
 
         public int[] Parse(string input)
@@ -29,16 +29,54 @@ namespace StringCalculator.Services.Parsers
 
             string[] numbersArray = _delimiterService.GetNumbersFromDelimitedString(input);
 
+            int[] numbers = ConvertStringsToNumbers(numbersArray);
+
+            return _numberFilterService.FilterOutInvalidNumbers(numbers);
+        }
+
+        private int[] ConvertStringsToNumbers(string[] numbersArray)
+        {
             int listLength = numbersArray.Length;
             int[] numbers = new int[listLength];
 
             for (int i = 0; i < listLength; i++)
             {
-                int currentNumber = int.Parse(numbersArray[i]);
-                numbers[i] = Math.Abs(currentNumber);
+                int? currentNumber = ConvertStringToNumber(numbersArray[i]);
+
+                if (currentNumber.HasValue)
+                {
+                    numbers[i] = currentNumber.Value;
+                }
             }
 
-            return _numberFilterService.FilterOutInvalidNumbers(numbers);
+            return numbers;
+        }
+
+        private static int? ConvertStringToNumber(string input)
+        {
+            StringBuilder result = new StringBuilder();
+
+            foreach (char c in input)
+            {
+                if (char.IsDigit(c))
+                {
+                    result.Append(c);
+                    continue;
+                }
+
+                int? letterToNumber = ConvertLetterToNumber(c);
+                if (letterToNumber.HasValue)
+                {
+                    result.Append(letterToNumber.Value);
+                }
+            }
+
+            return result.Length > 0 ? (int?)int.Parse(result.ToString()) : null;
+        }
+
+        private static int? ConvertLetterToNumber(char letter)
+        {
+            return letter >= 'a' && letter <= 'j' ? letter - 'a' + 1 : (int?)null;
         }
     }
 }
