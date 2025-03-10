@@ -144,11 +144,39 @@ namespace StringCalculatorTests.Services.Delimiters
         }
 
         [Fact]
-        public void GIVEN_AnInputWithLettersAsNumbers_WHEN_GettingNumbersFromDelimetedString_THEN_ReturnNumbersRepresentedByLetters()
+        public void GIVEN_AnInputWithLettersAsNumbers_WHEN_GettingNumbersFromDelimitedString_THEN_ReturnNumbersRepresentedByLetters()
         {
             // Arrange
             string inputNumbers = "##[*][%]\na*b%c";
             string[] expectedResult = ["a", "b", "c"];
+
+            // Act
+            string[] result = _subtractionDelimiter.GetNumbersFromDelimitedString(inputNumbers);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Fact]
+        public void GIVEN_DelimeterIdentifierInInput_When_GettingNumbersFromDelimitedString_THEN_ReturnNumbers()
+        {
+            // Arrange
+            string inputNumbers = "<(>)##(*)\n1*2*3";
+            string[] expectedResult = new string[] { "1", "2", "3" };
+
+            // Act
+            string[] result = _subtractionDelimiter.GetNumbersFromDelimitedString(inputNumbers);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Fact]
+        public void GIVEN_MultipleDelimeterIdentifiersInInput_When_GettingNumbersFromDelimitedString_THEN_ReturnNumbers()
+        {
+            // Arrange
+            string inputNumbers = "<<>>##<$$$><###>\n5$$$6###7";
+            string[] expectedResult = new string[] { "5", "6", "7" };
 
             // Act
             string[] result = _subtractionDelimiter.GetNumbersFromDelimitedString(inputNumbers);
