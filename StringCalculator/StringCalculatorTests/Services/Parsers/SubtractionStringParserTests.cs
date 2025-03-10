@@ -165,5 +165,38 @@ namespace StringCalculatorTests.Services.Parsers
             // Assert
             Assert.Equal(result, expectedResult);
         }
+
+        [Fact]
+        public void GIVEN_AnInputWithLettersAsNumbers_WHEN_ParsingNumbers_THEN_ReturnListOfIntegers()
+        {
+            // Arrange
+            string input = "a;b";
+            int[] expectedResult = new int[] { 1, 2 };
+            string[] expectedNumbersFromDelimeterService = ["a", "b"];
+            _delimiterServiceMock.Setup(s => s.GetNumbersFromDelimitedString(input)).Returns(expectedNumbersFromDelimeterService);
+            _numbersFilterServiceMock.Setup(s => s.FilterOutInvalidNumbers(expectedResult)).Returns(expectedResult);
+
+            // Act
+            int[] result = _stringParser.Parse(input);
+
+            // Assert
+            Assert.Equal(result, expectedResult);
+        }
+
+        [Fact]
+        public void GIVEN_AnInputWithLettersBeyondJAsNumbers_WHEN_ParsingNumbers_THEN_ReturnListOfIntegersExcludingIntegersRepresentedByJAndBeyond()
+        {
+            string input = "z;c;b;k";
+            int[] expectedResult = new int[] { 3, 2 };
+            string[] expectedNumbersFromDelimeterService = ["c", "b"];
+            _delimiterServiceMock.Setup(s => s.GetNumbersFromDelimitedString(input)).Returns(expectedNumbersFromDelimeterService);
+            _numbersFilterServiceMock.Setup(s => s.FilterOutInvalidNumbers(expectedResult)).Returns(expectedResult);
+
+            // Act
+            int[] result = _stringParser.Parse(input);
+
+            // Assert
+            Assert.Equal(result, expectedResult);
+        }
     }
 }

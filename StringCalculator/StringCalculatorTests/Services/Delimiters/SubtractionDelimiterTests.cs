@@ -142,5 +142,19 @@ namespace StringCalculatorTests.Services.Delimiters
             // Assert
             Assert.Equal(expectedResult, result);
         }
+
+        [Fact]
+        public void GIVEN_AnInputWithLettersAsNumbers_WHEN_GettingNumbersFromDelimetedString_THEN_ReturnNumbersRepresentedByLetters()
+        {
+            // Arrange
+            string inputNumbers = "##[*][%]\na*b%c";
+            string[] expectedResult = ["a", "b", "c"];
+
+            // Act
+            string[] result = _subtractionDelimiter.GetNumbersFromDelimitedString(inputNumbers);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
+        }
     }
 }
