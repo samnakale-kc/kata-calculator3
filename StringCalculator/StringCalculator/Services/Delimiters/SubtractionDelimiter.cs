@@ -8,11 +8,10 @@ namespace StringCalculator.Services.Delimiters
 {
     public class SubtractionDelimiter : IDelimiter
     {
-        private const string CustomDelimiterNewLineStartString = @"##";
+        private const string CustomDelimiterNewLineStartString = "##";
         private const string NewLineCharacter = "\n";
         private const string MultiCharacterDelimiterStartString = "[";
         private const string MultiCharacterDelimiterEndString = "]";
-
         private const string StartOfDelimiterStartIdentifier = "<";
         private const string EndOfDelimiterEndIdentifier = ">";
 
@@ -26,10 +25,10 @@ namespace StringCalculator.Services.Delimiters
             bool inputDeclaresDelimiterSeparators = DoesInputHaveDelimiterSeparatorIdentifiers(input);
 
             string[] delimitersToSplitStringBy = GetDelimitersToSplitStringBy(
-                input, 
-                inputDeclaresDelimiterSeparators, 
-                inputHasFirstLineWithDelimiter, 
-                inputHasCustomDelimiter, 
+                input,
+                inputDeclaresDelimiterSeparators,
+                inputHasFirstLineWithDelimiter,
+                inputHasCustomDelimiter,
                 inputHasMultipleDelimiters);
 
             if (inputHasMultipleDelimiters || inputHasFirstLineWithDelimiter || inputDeclaresDelimiterSeparators)
@@ -51,12 +50,12 @@ namespace StringCalculator.Services.Delimiters
             {
                 return new string[] { GetCustomDelimiterFromInputWithoutFirstLine(input) };
             }
-            
+
             if (inputHasMultipleDelimiters)
             {
                 return GetCustomDelimitersFromInputWithMultipleDelimiters(input).ToArray();
             }
-            
+
             if (inputHasFirstLineWithDelimiter)
             {
                 return new string[] { GetCustomDelimiterFromFirstLine(input) };
